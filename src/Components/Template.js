@@ -11,7 +11,8 @@ class App extends Component {
 		columns: [],
 		users: [],
 		users_data: [],
-		users_row: []
+		users_row: [],
+		ready: false
 	}
 
 	downloadData = (url) => {
@@ -39,10 +40,29 @@ class App extends Component {
 							let userRef = rootRef.doc(user)
 							let answersRef = userRef.collection("answers")
 							answersRef.where("form_name", "==", this.state.main_title).get().then(querySnapshot => {
-								querySnapshot.forEach(snap => {
-									this.state.users_data.push(snap.data())
+								querySnapshot.forEach((snap, index) => {
+									console.log("REFS")
+									let row = {}
+									let element = snap.data()
+									if (element) {
+										let keys = Object.keys(element.answers)
+										if (keys.length !== 8) {
+											row = {}
+										}
+										else {
+											keys.forEach(key => {
+												row[key] = element.answers[key]
+											})
+											let arr = [...this.state.users_row]
+											arr.push(row)
+											this.setState({users_row: arr})
+											console.log(arr)
+										}
+									}
+									// console.log(row)
+									// this.state.users_data.push(snap.data())
 								})
-							}).then(this.rowField())
+							})
 						})
 					})
 				});
@@ -55,7 +75,7 @@ class App extends Component {
 	columns() {
 
 		let cols = this.state.questions.map((el, i) => {
-			return {title: el.title, field: `a${i}`, editable: "never"}
+			return {title: el.title, field: i, editable: "never"}
 		})
 		cols.push({title: 'Date', field: 'date', editable: "never"})
 		cols.push({title: 'Timestamp', field: 'timestamp', editable: "never"})
@@ -68,46 +88,30 @@ class App extends Component {
 
 	}
 
-	rowField() {
-		const dataRows = []
-		this.state.users_data.map((element, index) => {
-			let row = {}
+	// rowField() {
+	// 	const dataRows = []
+	// 	this.state.users_data.map((element, index) => {
+	// 		let row = {}
+	// 		console.log("ROWFIELD")
+	// 		Object.keys(element.answers).forEach(key => {
+	// 			row[key] = element.answers[key]
+	// 		})
+	// 		// row['date'] = element.date
+	// 		// row['timestamp'] = element.timestamp
+	// 		dataRows[index] = row
+	// 	})
+	// 	this.setState({users_row: dataRows})
+	// }
 
-			Object.keys(element.answers).forEach(key => {
-				row[`a${key}`] = element.answers[key]
-			})
-			row['date'] = element.date
-			row['timestamp'] = element.timestamp
-			dataRows[index] = row
-		})
-		this.setState({users_row: dataRows})
-	}
 
 	render() {
-
-		const rows = () => {
-			const dataRows = []
-			this.state.users_data.map((element, index) => {
-				let row = {}
-
-				Object.keys(element.answers).forEach(key => {
-					row[`a${key}`] = element.answers[key]
-				})
-				row['date'] = element.date
-				row['timestamp'] = element.timestamp
-				dataRows[index] = row
-				this.state.users_row[index] = row
-			})
-		}
-
 		return (
-
-
 			<div className="App">
-				< button onClick={() => console.log(this.state)}>show state</button>
+				<button onClick={() => this.setState({ready: true})}>Set ready</button>
+				{/* <button onClick={() => console.log(this.state)}>show state</button>
 				<button onClick={() => this.columns()}>show sdsaftate</button>
-				<button onClick={() => this.rowField()}>show rowField</button>
-				<MaterialTable columns={this.state.columns} title={this.state.main_title} data={this.state.users_row}/>
+				<button onClick={() => this.rowField()}>show rowField</button> */}
+				{this.state.ready ? <MaterialTable columns={this.state.columns} title={this.state.main_title} data={this.state.users_row}/> : null}
 			</div>
 		);
 	};
