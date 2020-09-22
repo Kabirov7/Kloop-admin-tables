@@ -19,5 +19,6 @@ export default function MTable(props) {
 				});
 			}
 		}}
+		options={{paging: false}}
 	/>)
 }

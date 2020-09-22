@@ -41,26 +41,57 @@ class App extends Component {
 							let answersRef = userRef.collection("answers")
 							answersRef.where("form_name", "==", this.state.main_title).get().then(querySnapshot => {
 								querySnapshot.forEach((snap, index) => {
-									console.log("REFS")
 									let row = {}
 									let element = snap.data()
 									if (element) {
-										let keys = Object.keys(element.answers)
-										if (keys.length !== 8) {
-											row = {}
-										}
-										else {
-											keys.forEach(key => {
-												row[key] = element.answers[key]
-											})
-											let arr = [...this.state.users_row]
-											arr.push(row)
-											this.setState({users_row: arr})
-											console.log(arr)
-										}
+										let keys = Object.keys(this.state.columns)
+										// console.log(element.answers)
+										let answers = []
+
+		
+										this.state.questions.forEach((question, ind) => {
+											if (element.answers[ind]) {
+												// console.log(ind)
+												console.log(question)
+												console.log(element.answers[ind])
+											}
+											if (question.type === 'multiradio') {
+												let len = question.subquestion.length
+												for (let i = 0; i < len; i++) {
+													if (element.answers[ind] && element.answers[ind][i]) {
+														answers.push(element.answers[ind][i])
+													}
+													else {
+														answers.push('-')
+													}
+												}
+											}
+											else {
+												if (element.answers[ind]) {
+													answers.push(element.answers[ind])
+												}
+												else {
+													answers.push('-')
+												}
+											}
+										})
+										
+
+										console.log(answers)
+
+										keys.forEach(key => {
+											if (answers[key]) {
+												row[key] = answers[key]
+											}
+											else {
+												row[key] = "-"
+											}
+										})
+										let arr = [...this.state.users_row]
+										arr.push(row)
+										this.setState({users_row: arr})
+										console.log(arr)
 									}
-									// console.log(row)
-									// this.state.users_data.push(snap.data())
 								})
 							})
 						})
@@ -73,19 +104,25 @@ class App extends Component {
 	}
 
 	columns() {
+		let tmpCols = []
 
-		let cols = this.state.questions.map((el, i) => {
-			return {title: el.title, field: i, editable: "never"}
+		this.state.questions.forEach((el, i) => {
+			if (el.type === 'multiradio') {
+				el.subquestion.forEach(subquestion => tmpCols.push({title: subquestion.q, editable: "never"}))
+			}
+			else {
+				tmpCols.push({title: el.title, editable: "never"})
+			}
 		})
-		cols.push({title: 'Date', field: 'date', editable: "never"})
-		cols.push({title: 'Timestamp', field: 'timestamp', editable: "never"})
+		let cols = tmpCols.map((col, i) => col = {...col, field: i})
+		console.log(cols)
+		// cols.push({title: 'Date', field: 'date', editable: "never"})
+		// cols.push({title: 'Timestamp', field: 'timestamp', editable: "never"})
 		this.setState({columns: cols})
 	}
 
 	componentDidMount() {
 		this.downloadData(this.props.url)
-
-
 	}
 
 	// rowField() {
