@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/kloop-table/static/css/main.5ecd60fb.chunk.css",
+    "main.js": "/kloop-table/static/js/main.baceb7cf.chunk.js",
+    "main.js.map": "/kloop-table/static/js/main.baceb7cf.chunk.js.map",
+    "runtime-main.js": "/kloop-table/static/js/runtime-main.965dc7b2.js",
+    "runtime-main.js.map": "/kloop-table/static/js/runtime-main.965dc7b2.js.map",
+    "static/js/2.1da138e5.chunk.js": "/kloop-table/static/js/2.1da138e5.chunk.js",
+    "static/js/2.1da138e5.chunk.js.map": "/kloop-table/static/js/2.1da138e5.chunk.js.map",
+    "index.html": "/kloop-table/index.html",
+    "precache-manifest.01102149fceec255a0b46dc74d38d908.js": "/kloop-table/precache-manifest.01102149fceec255a0b46dc74d38d908.js",
+    "service-worker.js": "/kloop-table/service-worker.js",
+    "static/css/main.5ecd60fb.chunk.css.map": "/kloop-table/static/css/main.5ecd60fb.chunk.css.map",
+    "static/js/2.1da138e5.chunk.js.LICENSE.txt": "/kloop-table/static/js/2.1da138e5.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.965dc7b2.js",
+    "static/js/2.1da138e5.chunk.js",
+    "static/css/main.5ecd60fb.chunk.css",
+    "static/js/main.baceb7cf.chunk.js"
+  ]
+}
